@@ -1,0 +1,52 @@
+services:
+  node-a:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solidaritygrid-node-a
+    hostname: node-a
+    environment:
+      - NODE_ID=NodeA
+      - PEERS=http://node-b:5000,http://node-c:5000
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    ports:
+      - "5001:5000"
+    networks:
+      - solidarity-net
+
+  node-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solidaritygrid-node-b
+    hostname: node-b
+    environment:
+      - NODE_ID=NodeB
+      - PEERS=http://node-a:5000,http://node-c:5000
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    ports:
+      - "5002:5000"
+    networks:
+      - solidarity-net
+
+  node-c:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solidaritygrid-node-c
+    hostname: node-c
+    environment:
+      - NODE_ID=NodeC
+      - PEERS=http://node-a:5000,http://node-b:5000
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    ports:
+      - "5003:5000"
+    networks:
+      - solidarity-net
+
+networks:
+  solidarity-net:
+    driver: bridge
